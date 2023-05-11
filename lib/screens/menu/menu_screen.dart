@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tkfoodadmin/blocs/blocs.dart';
 import 'package:tkfoodadmin/config/config.dart';
 import 'package:tkfoodadmin/models/models.dart';
 import 'package:tkfoodadmin/widgets/widgets.dart';
@@ -128,9 +129,43 @@ class MenuScreen extends StatelessWidget {
             'Products',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          ...Product.products.map((product) {
-            return ProductListTile(product: product);
-          }).toList(),
+          const SizedBox(height: 20),
+          BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                );
+              }
+              if (state is ProductLoaded) {
+                return ReorderableListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (int index = 0; index < state.products.length; index++,)
+                      ProductListTile(
+                        onTap: () {},
+                        product: state.products[index],
+                        key: ValueKey(
+                          state.products[index].id,
+                        ),
+                      ),
+                  ],
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<ProductBloc>().add(
+                          SortProducts(
+                            oldIndex: oldIndex,
+                            newIndex: newIndex,
+                          ),
+                        );
+                  },
+                );
+              } else {
+                return const Text('Something went wrong.');
+              }
+            },
+          ),
         ],
       ),
     );
@@ -149,9 +184,48 @@ class MenuScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 20),
-          ...Category.categories.map((category) {
-            return CategoryListTile(category: category);
-          }).toList(),
+          BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (context, state) {
+              if (state is CategoryLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                );
+              }
+              if (state is CategoryLoaded) {
+                return ReorderableListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (int index = 0;
+                        index < state.categories.length;
+                        index++,)
+                      CategoryListTile(
+                        category: state.categories[index],
+                        onTap: () {
+                          context
+                              .read<CategoryBloc>()
+                              .add(SelectCategory(state.categories[index]));
+                        },
+                        key: ValueKey(
+                          state.categories[index].id,
+                        ),
+                      ),
+                  ],
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<CategoryBloc>().add(
+                          SortCategories(
+                            oldIndex: oldIndex,
+                            newIndex: newIndex,
+                          ),
+                        );
+                  },
+                );
+              } else {
+                return const Text('Something went wrong.');
+              }
+            },
+          ),
         ],
       ),
     );
