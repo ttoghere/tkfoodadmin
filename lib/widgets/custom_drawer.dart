@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tkfoodadmin/screens/menu/menu_screen.dart';
+import 'package:tkfoodadmin/screens/settings/settings_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -8,18 +10,19 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> screens = {
-      'Dashboard': {
-        'routeName': '/dash',
-        'icon': const Icon(Icons.dashboard),
+      // 'Dashboard': {
+      //   'routeName': '/dash',
+      //   'icon': const Icon(Icons.dashboard),
+      // },
+      "Settings": {
+        "routeName": SettingsScreen.routeName,
+        "icon": const Icon(Icons.settings)
       },
       'Menu': {
-        'routeName': '/menu',
+        'routeName': MenuScreen.routeName,
         'icon': const Icon(Icons.menu_book),
       },
-      'Opening Hours': {
-        'routeName': '/opening-hours',
-        'icon': const Icon(Icons.lock_clock),
-      },
+
       'Logout': {
         'routeName': '/logout',
         'icon': const Icon(Icons.logout_outlined),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tkfoodadmin/blocs/settings/settings_bloc.dart';
+import 'package:tkfoodadmin/screens/settings/settings_screen.dart';
 import '/blocs/blocs.dart';
 import '/config/theme.dart';
 
@@ -36,15 +38,24 @@ class MyApp extends StatelessWidget {
               LoadProducts(products: Product.products),
             ),
         ),
+        BlocProvider(
+          create: (context) => SettingsBloc()
+            ..add(
+              LoadSettings(
+                restaurant:
+                    Restaurant(openingHours: OpeningHours.openingHoursList),
+              ),
+            ),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: theme(),
         initialRoute: '/menu',
         routes: {
-          '/menu': (context) => const MenuScreen(),
+          MenuScreen.routeName: (context) => const MenuScreen(),
+          SettingsScreen.routeName: (context) => const SettingsScreen()
           // '/dash': (context) => const DashboardScreen(),
-          // '/opening-hours': (context) => const OpeningHoursScreen(),
         },
       ),
     );

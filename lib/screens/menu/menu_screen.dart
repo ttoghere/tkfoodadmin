@@ -7,6 +7,7 @@ import '/models/models.dart';
 import '/widgets/widgets.dart';
 
 class MenuScreen extends StatelessWidget {
+  static const routeName = "/menu";
   const MenuScreen({
     Key? key,
   }) : super(key: key);
