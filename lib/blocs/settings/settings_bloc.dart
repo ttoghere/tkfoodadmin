@@ -1,17 +1,31 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:tkfoodadmin/models/models.dart';
+import 'package:tkfoodadmin/repositories/restaurant/restaurant_repository.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(SettingsLoading()) {
+  final RestaurantRepository _restaurantRepository;
+  StreamSubscription? _restaurantSubscription;
+  SettingsBloc({required RestaurantRepository restaurantRepository})
+      : _restaurantRepository = restaurantRepository,
+        super(SettingsLoading()) {
     on<LoadSettings>(_onLoadSettings);
     on<UpdateOpeningHours>(_onUpdateOpeningHours);
     on<UpdateSettings>(_onUpdateSettings);
+    _restaurantSubscription = restaurantRepository
+        .getRestaurant("MxsHeQvTYBNBeAYwMvvi")
+        .listen((restaurant) {
+      log("Restaurant...");
+      add(LoadSettings(restaurant: restaurant));
+    });
   }
 
   void _onLoadSettings(LoadSettings event, Emitter<SettingsState> emit) async {
@@ -36,5 +50,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   void _onUpdateSettings(UpdateSettings event, Emitter<SettingsState> emit) {
     emit(SettingsLoaded(event.restaurant));
+  }
+
+  @override
+  Future<void> close() {
+    _restaurantSubscription?.cancel();
+    return super.close();
   }
 }

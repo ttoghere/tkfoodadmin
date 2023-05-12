@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/blocs/blocs.dart';
 import '/config/responsive.dart';
-import '/models/models.dart';
 
 import '/widgets/widgets.dart';
 
@@ -237,7 +236,6 @@ class MenuScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return ProductCard(
                     product: state.products[index],
-                    index: index,
                   );
                 },
               ),

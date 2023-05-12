@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tkfoodadmin/repositories/restaurant/restaurant_repository.dart';
 import '/blocs/blocs.dart';
 import '/models/models.dart';
 
@@ -10,25 +11,35 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
+  final RestaurantRepository _restaurantRepository;
   final CategoryBloc _categoryBloc;
   StreamSubscription? _categorySubscription;
+  StreamSubscription? _restaurantSubscription;
 
-  ProductBloc({required CategoryBloc categoryBloc})
+  ProductBloc(
+      {required CategoryBloc categoryBloc,
+      required RestaurantRepository restaurantRepository})
       : _categoryBloc = categoryBloc,
+        _restaurantRepository = restaurantRepository,
         super(ProductLoading()) {
     on<LoadProducts>(_onLoadProducts);
-    on<UpdateProducts>(_onUpdateProducts);
+    on<FilterProducts>(_onFilterProducts);
     on<SortProducts>(_onSortProducts);
     on<AddProduct>(_onAddProduct);
 
     _categorySubscription = _categoryBloc.stream.listen((state) {
       if (state is CategoryLoaded && state.selectedCategory != null) {
         add(
-          UpdateProducts(
+          FilterProducts(
             category: (state.selectedCategory!),
           ),
         );
       } else {}
+    });
+    _restaurantSubscription = _restaurantRepository
+        .getRestaurant("MxsHeQvTYBNBeAYwMvvi")
+        .listen((restaurant) {
+      add(LoadProducts(products: restaurant.products!));
     });
   }
 
@@ -40,8 +51,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     emit(ProductLoaded(products: event.products));
   }
 
-  void _onUpdateProducts(
-    UpdateProducts event,
+  void _onFilterProducts(
+    FilterProducts event,
     Emitter<ProductState> emit,
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -77,18 +88,19 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     } catch (_) {}
   }
 
+  void _onAddProduct(AddProduct event, Emitter<ProductState> emit) async {
+    if (state is ProductLoaded) {
+      List<Product> newProducts = List.from((state as ProductLoaded).products)
+        ..add(event.product);
+      _restaurantRepository.editProducts(newProducts, "MxsHeQvTYBNBeAYwMvvi");
+      emit(ProductLoaded(products: newProducts));
+    }
+  }
+
   @override
   Future<void> close() async {
     _categorySubscription?.cancel();
+    _restaurantSubscription?.cancel();
     super.close();
-  }
-
-  void _onAddProduct(AddProduct event, Emitter<ProductState> emit) async {
-    if (state is ProductLoaded) {
-      log("Adding Product...");
-      emit(ProductLoaded(
-          products: List.from((state as ProductLoaded).products)
-            ..add(event.product)));
-    }
   }
 }

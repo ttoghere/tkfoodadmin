@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tkfoodadmin/blocs/settings/settings_bloc.dart';
+import 'package:tkfoodadmin/repositories/restaurant/restaurant_repository.dart';
 import 'package:tkfoodadmin/screens/settings/settings_screen.dart';
 import '/blocs/blocs.dart';
 import '/config/theme.dart';
@@ -23,40 +24,44 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => CategoryBloc()
-            ..add(
-              LoadCategories(categories: Category.categories),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => ProductBloc(
-            categoryBloc: BlocProvider.of<CategoryBloc>(context),
-          )..add(
-              LoadProducts(products: Product.products),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => SettingsBloc()
-            ..add(
-              LoadSettings(
-                restaurant:
-                    Restaurant(openingHours: OpeningHours.openingHoursList),
-              ),
-            ),
-        ),
+        RepositoryProvider(create: (context) => RestaurantRepository()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: theme(),
-        initialRoute: '/menu',
-        routes: {
-          MenuScreen.routeName: (context) => const MenuScreen(),
-          SettingsScreen.routeName: (context) => const SettingsScreen()
-          // '/dash': (context) => const DashboardScreen(),
-        },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => CategoryBloc()
+              ..add(
+                LoadCategories(categories: Category.categories),
+              ),
+          ),
+          BlocProvider(
+            create: (context) => ProductBloc(
+              restaurantRepository: context.read<RestaurantRepository>(),
+              categoryBloc: BlocProvider.of<CategoryBloc>(context),
+            )..add(
+                LoadProducts(products: Product.products),
+              ),
+          ),
+          BlocProvider(
+            create: (context) => SettingsBloc(
+                restaurantRepository: context.read<RestaurantRepository>())
+              ..add(
+                const LoadSettings(),
+              ),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: theme(),
+          initialRoute: '/menu',
+          routes: {
+            MenuScreen.routeName: (context) => const MenuScreen(),
+            SettingsScreen.routeName: (context) => const SettingsScreen()
+            // '/dash': (context) => const DashboardScreen(),
+          },
+        ),
       ),
     );
   }

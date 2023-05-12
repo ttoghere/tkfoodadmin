@@ -194,7 +194,7 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 Text(
                   'Basic Information',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(

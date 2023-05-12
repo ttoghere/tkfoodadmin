@@ -15,6 +15,16 @@ class Category extends Equatable {
     required this.index,
   });
 
+  Map<String, dynamic> toDocument() {
+    return {
+      "id": id,
+      "name": name,
+      "description": description,
+      "imageUrl": imageUrl,
+      "index": index
+    };
+  }
+
   Category copyWith({
     String? id,
     String? name,
@@ -33,7 +43,7 @@ class Category extends Equatable {
 
   factory Category.fromSnapshot(Map<String, dynamic> snap) {
     return Category(
-      id: snap['id'],
+      id: snap['id'].toString(),
       name: snap['name'],
       description: snap['description'],
       imageUrl: snap['imageUrl'],
