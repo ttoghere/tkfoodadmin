@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +19,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<LoadProducts>(_onLoadProducts);
     on<UpdateProducts>(_onUpdateProducts);
     on<SortProducts>(_onSortProducts);
+    on<AddProduct>(_onAddProduct);
 
     _categorySubscription = _categoryBloc.stream.listen((state) {
       if (state is CategoryLoaded && state.selectedCategory != null) {
@@ -79,5 +81,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Future<void> close() async {
     _categorySubscription?.cancel();
     super.close();
+  }
+
+  void _onAddProduct(AddProduct event, Emitter<ProductState> emit) async {
+    if (state is ProductLoaded) {
+      log("Adding Product...");
+      emit(ProductLoaded(
+          products: List.from((state as ProductLoaded).products)
+            ..add(event.product)));
+    }
   }
 }
