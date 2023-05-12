@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tkfoodadmin/blocs/blocs.dart';
-import 'package:tkfoodadmin/config/config.dart';
-import 'package:tkfoodadmin/models/models.dart';
-import 'package:tkfoodadmin/widgets/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '/blocs/blocs.dart';
+import '/config/responsive.dart';
+import '/models/models.dart';
+
+import '/widgets/widgets.dart';
 
 class MenuScreen extends StatelessWidget {
-  static const routeName = "/menu";
   const MenuScreen({
     Key? key,
   }) : super(key: key);
-//
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +146,6 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     for (int index = 0; index < state.products.length; index++,)
                       ProductListTile(
-                        onTap: () {},
                         product: state.products[index],
                         key: ValueKey(
                           state.products[index].id,
@@ -203,9 +203,9 @@ class MenuScreen extends StatelessWidget {
                       CategoryListTile(
                         category: state.categories[index],
                         onTap: () {
-                          context
-                              .read<CategoryBloc>()
-                              .add(SelectCategory(state.categories[index]));
+                          context.read<CategoryBloc>().add(
+                                SelectCategory(state.categories[index]),
+                              );
                         },
                         key: ValueKey(
                           state.categories[index].id,

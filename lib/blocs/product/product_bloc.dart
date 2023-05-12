@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '/blocs/blocs.dart';
 import '/models/models.dart';

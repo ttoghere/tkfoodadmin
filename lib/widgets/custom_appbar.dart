@@ -15,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         'Your Restaurant Name',
         style: Theme.of(context)
             .textTheme
-            .headlineLarge!
+            .displayMedium!
             .copyWith(color: Colors.white),
       ),
       centerTitle: false,

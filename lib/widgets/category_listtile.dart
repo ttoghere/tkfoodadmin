@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:tkfoodadmin/models/models.dart';
 
 class CategoryListTile extends StatelessWidget {
@@ -12,6 +10,7 @@ class CategoryListTile extends StatelessWidget {
 
   final Category category;
   final Function()? onTap;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -24,11 +23,13 @@ class CategoryListTile extends StatelessWidget {
         category.name,
         style: Theme.of(context).textTheme.headlineSmall,
       ),
-      subtitle: Text(
-        category.description,
-        style: Theme.of(context).textTheme.titleLarge,
+      subtitle: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Text(
+          category.description,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
       ),
-      // trailing: const Icon(Icons.menu),
     );
   }
 }

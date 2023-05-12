@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tkfoodadmin/blocs/blocs.dart';
-import 'package:tkfoodadmin/config/config.dart';
-import 'package:tkfoodadmin/models/models.dart';
+import '/blocs/blocs.dart';
+import '/config/theme.dart';
+
+import 'models/models.dart';
+import 'screens/screens.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,11 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => CategoryBloc()
-              ..add(LoadCategories(categories: Category.categories))),
+          create: (context) => CategoryBloc()
+            ..add(
+              LoadCategories(categories: Category.categories),
+            ),
+        ),
         BlocProvider(
           create: (context) => ProductBloc(
             categoryBloc: BlocProvider.of<CategoryBloc>(context),
@@ -34,12 +38,11 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'TKFood Admin',
-        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
         theme: theme(),
-        initialRoute: MenuScreen.routeName,
+        initialRoute: '/menu',
         routes: {
-          MenuScreen.routeName: (context) => const MenuScreen(),
+          '/menu': (context) => const MenuScreen(),
           // '/dash': (context) => const DashboardScreen(),
           // '/opening-hours': (context) => const OpeningHoursScreen(),
         },
