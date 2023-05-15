@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tkfoodadmin/blocs/product/product_bloc.dart';
+import 'package:tkfoodadmin/main.dart';
 import 'package:tkfoodadmin/models/models.dart';
 import 'package:tkfoodadmin/widgets/custom_textfield.dart';
 import 'package:tkfoodadmin/widgets/widgets.dart';
+import 'package:uuid/uuid.dart';
 
 class AddProductCard extends StatelessWidget {
   const AddProductCard({
@@ -41,7 +43,7 @@ class AddProductCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             'Add a Product',
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
         ],
       ),
@@ -49,12 +51,13 @@ class AddProductCard extends StatelessWidget {
   }
 
   Dialog _buildNewProduct(BuildContext context) {
-    Product product = const Product(
-      restaurantId: 'MbyvrvKY1hdNohNU11EL',
+    Product product = Product(
+      restaurantId: restaurantID,
       name: '',
       category: '',
       description: '',
       imageUrl: '',
+      id: const Uuid().v1(),
       price: 0,
     );
 
@@ -68,7 +71,7 @@ class AddProductCard extends StatelessWidget {
           children: [
             Text(
               'Add a Product',
-              style: Theme.of(context).textTheme.headline2,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 20),
             CustomDropdownButton(
@@ -129,7 +132,7 @@ class AddProductCard extends StatelessWidget {
                 ),
                 child: Text(
                   'Save',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                         color: Colors.white,
                       ),
                 ),

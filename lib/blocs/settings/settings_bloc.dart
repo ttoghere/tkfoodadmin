@@ -20,9 +20,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<LoadSettings>(_onLoadSettings);
     on<UpdateOpeningHours>(_onUpdateOpeningHours);
     on<UpdateSettings>(_onUpdateSettings);
-    _restaurantSubscription = restaurantRepository
-        .getRestaurant("MxsHeQvTYBNBeAYwMvvi")
-        .listen((restaurant) {
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
       log("Restaurant...");
       add(LoadSettings(restaurant: restaurant));
     });
@@ -43,12 +42,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             ? event.openingHours
             : openingHours;
       })).toList();
+      _restaurantRepository.editRestaurantOpeningHours(openingHoursList);
       emit(SettingsLoaded(
           state.restaurant.copyWith(openingHours: openingHoursList)));
     }
   }
 
   void _onUpdateSettings(UpdateSettings event, Emitter<SettingsState> emit) {
+    if (event.isUpdateCompleted) {
+      _restaurantRepository.editRestaurantSettings(event.restaurant);
+    }
     emit(SettingsLoaded(event.restaurant));
   }
 

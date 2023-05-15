@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tkfoodadmin/main.dart';
 import 'package:tkfoodadmin/models/opening_hours_model.dart';
 import 'package:tkfoodadmin/models/product_model.dart';
 import 'package:tkfoodadmin/models/restaurant_model.dart';
@@ -16,17 +17,17 @@ class RestaurantRepository extends BaseRestaurantRepository {
   }
 
   @override
-  Future<void> editProducts(List<Product> products, String restaurantId) async {
-    await _firebaseFirestore.collection("restaurants").doc(restaurantId).update(
+  Future<void> editProducts(List<Product> products) async {
+    await _firebaseFirestore.collection("restaurants").doc(restaurantID).update(
         {"products": products.map((product) => product.toDocument()).toList()});
   }
 
   @override
   Future<void> editRestaurantOpeningHours(
-      List<OpeningHours> openingHours, String restaurantId) async {
+      List<OpeningHours> openingHours) async {
     await _firebaseFirestore
         .collection("restaurants")
-        .doc(restaurantId)
+        .doc(restaurantID)
         .update({
       "openingHours":
           openingHours.map((openingHours) => openingHours.toDocument()).toList()
@@ -35,18 +36,19 @@ class RestaurantRepository extends BaseRestaurantRepository {
 
   @override
   Future<void> editRestaurantSettings(
-      Restaurant restaurant, String restaurantId) async {
+    Restaurant restaurant,
+  ) async {
     await _firebaseFirestore
         .collection("restaurants")
-        .doc(restaurantId)
+        .doc(restaurantID)
         .update(restaurant.toDocument());
   }
 
   @override
-  Stream<Restaurant> getRestaurant(String restaurantId) {
+  Stream<Restaurant> getRestaurant() {
     return _firebaseFirestore
         .collection("restaurants")
-        .doc(restaurantId)
+        .doc(restaurantID)
         .snapshots()
         .map((event) => Restaurant.fromSnapshot(event));
   }

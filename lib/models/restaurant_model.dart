@@ -100,10 +100,6 @@ class Restaurant extends Equatable {
     };
   }
 
-  String toJson() => json.encode(toDocument());
-
-  // factory RestaurantOne.fromJson(String source) => RestaurantOne.fromMap(json.decode(source));
-
   factory Restaurant.fromSnapshot(DocumentSnapshot snap) {
     return Restaurant(
       id: snap.id,

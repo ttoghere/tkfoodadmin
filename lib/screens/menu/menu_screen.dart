@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tkfoodadmin/widgets/add_product_card.dart';
 import '/blocs/blocs.dart';
 import '/config/responsive.dart';
 
@@ -232,11 +233,13 @@ class MenuScreen extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: state.products.length,
+                itemCount: state.products.length + 1,
                 itemBuilder: (BuildContext context, int index) {
-                  return ProductCard(
-                    product: state.products[index],
-                  );
+                  return index == 0
+                      ? const AddProductCard()
+                      : ProductCard(
+                          product: state.products[index - 1],
+                        );
                 },
               ),
             ),

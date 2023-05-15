@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -36,9 +35,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         );
       } else {}
     });
-    _restaurantSubscription = _restaurantRepository
-        .getRestaurant("MxsHeQvTYBNBeAYwMvvi")
-        .listen((restaurant) {
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
       add(LoadProducts(products: restaurant.products!));
     });
   }
@@ -92,7 +90,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     if (state is ProductLoaded) {
       List<Product> newProducts = List.from((state as ProductLoaded).products)
         ..add(event.product);
-      _restaurantRepository.editProducts(newProducts, "MxsHeQvTYBNBeAYwMvvi");
+      _restaurantRepository.editProducts(newProducts);
       emit(ProductLoaded(products: newProducts));
     }
   }

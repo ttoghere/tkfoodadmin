@@ -157,6 +157,13 @@ class SettingsScreen extends StatelessWidget {
                   initialValue: (state.restaurant.description != null)
                       ? state.restaurant.description!
                       : '',
+                  onFocusChanged: (p0) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                              restaurant: state.restaurant,
+                              isUpdateCompleted: true),
+                        );
+                  },
                   onChanged: (value) {
                     context.read<SettingsBloc>().add(
                           UpdateSettings(
@@ -204,6 +211,13 @@ class SettingsScreen extends StatelessWidget {
                   initialValue: (state.restaurant.name != null)
                       ? state.restaurant.name!
                       : '',
+                  onFocusChanged: (p0) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                              restaurant: state.restaurant,
+                              isUpdateCompleted: true),
+                        );
+                  },
                   onChanged: (value) {
                     context.read<SettingsBloc>().add(
                           UpdateSettings(
@@ -227,6 +241,13 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         );
                   },
+                  onFocusChanged: (p0) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                              restaurant: state.restaurant,
+                              isUpdateCompleted: true),
+                        );
+                  },
                 ),
                 CustomTextFormField(
                   maxLines: 1,
@@ -241,6 +262,13 @@ class SettingsScreen extends StatelessWidget {
                             restaurant: state.restaurant
                                 .copyWith(tags: value.split(', ')),
                           ),
+                        );
+                  },
+                  onFocusChanged: (p0) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                              restaurant: state.restaurant,
+                              isUpdateCompleted: true),
                         );
                   },
                 ),
